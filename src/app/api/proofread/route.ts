@@ -1,3 +1,24 @@
+/**
+ * Proofread API Endpoint
+ *
+ * Usage:
+ * POST /api/proofread
+ *
+ * Request body:
+ * { "text": "Your text with errors" }
+ *
+ * Response:
+ * {
+ *   "originalText": "Original text",
+ *   "proofreadText": "Corrected text"
+ * }
+ *
+ * Example:
+ * curl -X POST http://localhost:3000/api/proofread \
+ *   -H "Content-Type: application/json" \
+ *   -d '{"text": "This is a sentance with mistaks."}'
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
