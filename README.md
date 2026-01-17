@@ -27,7 +27,6 @@ npm install
 
 ```bash
 GROQ_API_KEY=your_groq_api_key_here
-SPEECHMATICS_KEY=your_speechmatics_key_here
 ```
 
 ### Running Locally
@@ -58,10 +57,12 @@ Transcribes audio files to text using OpenAI's Whisper model via Groq.
 **Endpoint:** `POST /api/transcribe`
 
 **Request:**
+
 - Content-Type: `multipart/form-data`
 - Body: `file` - Audio file (.mp3, .wav, .m4a, etc.)
 
 **Response:**
+
 ```json
 {
   "text": "Transcribed text content"
@@ -99,8 +100,10 @@ Corrects spelling, grammar, and punctuation in text.
 **Endpoint:** `POST /api/proofread`
 
 **Request:**
+
 - Content-Type: `application/json`
 - Body:
+
 ```json
 {
   "text": "Your text with errors"
@@ -108,6 +111,7 @@ Corrects spelling, grammar, and punctuation in text.
 ```
 
 **Response:**
+
 ```json
 {
   "originalText": "Original text with errors",
@@ -127,7 +131,7 @@ curl -X POST http://localhost:3000/api/proofread \
 const response = await fetch("http://localhost:3000/api/proofread", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ text: "This is a sentance with mistaks." })
+  body: JSON.stringify({ text: "This is a sentance with mistaks." }),
 });
 
 const result = await response.json();
@@ -143,8 +147,10 @@ Creates professional, clear, and concise messages based on descriptions.
 **Endpoint:** `POST /api/compose`
 
 **Request:**
+
 - Content-Type: `application/json`
 - Body:
+
 ```json
 {
   "description": "Description of the message you want to compose"
@@ -152,6 +158,7 @@ Creates professional, clear, and concise messages based on descriptions.
 ```
 
 **Response:**
+
 ```json
 {
   "description": "Original description",
@@ -172,8 +179,8 @@ const response = await fetch("http://localhost:3000/api/compose", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    description: "I need to tell my team that the meeting is postponed"
-  })
+    description: "I need to tell my team that the meeting is postponed",
+  }),
 });
 
 const result = await response.json();
@@ -200,15 +207,18 @@ curl -X POST https://transcription-api-omega.vercel.app/api/proofread \
 All endpoints return consistent error responses:
 
 **400 Bad Request**
+
 - Missing required parameters
 - Invalid parameter types
 - Invalid file uploads
 
 **500 Internal Server Error**
+
 - AI service failures
 - Processing errors
 
 **Error Response Format:**
+
 ```json
 {
   "error": "Error message description"
