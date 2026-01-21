@@ -27,6 +27,7 @@ npm install
 
 ```bash
 GROQ_API_KEY=your_groq_api_key_here
+API_KEYS=your_api_key_here
 ```
 
 ### Running Locally
@@ -45,6 +46,35 @@ Production mode:
 npm run build
 npm start
 ```
+
+---
+
+## Authentication
+
+All API endpoints require authentication via Bearer token.
+
+### Setup
+
+Configure one or more API keys using the `API_KEYS` environment variable (comma-separated):
+
+```bash
+# .env
+API_KEYS=sk-your-key-1,sk-your-key-2
+```
+
+### Usage
+
+Include the API key in the `Authorization` header:
+
+```bash
+curl -X POST https://your-domain.com/api/transcribe \
+  -H "Authorization: Bearer sk-your-key-1" \
+  -F "file=@audio.mp3"
+```
+
+### Response Codes
+
+- `401` - Authentication failed (missing/invalid/malformed token)
 
 ---
 
@@ -74,6 +104,7 @@ Transcribes audio files to text using OpenAI's Whisper model via Groq.
 ```bash
 # Using curl
 curl -X POST http://localhost:3000/api/transcribe \
+  -H "Authorization: Bearer sk-your-key-1" \
   -F "file=@audio.mp3"
 ```
 
@@ -84,6 +115,9 @@ formData.append("file", audioBlob, "audio.wav");
 
 const response = await fetch("http://localhost:3000/api/transcribe", {
   method: "POST",
+  headers: {
+    "Authorization": "Bearer sk-your-key-1"
+  },
   body: formData,
 });
 
@@ -124,13 +158,17 @@ Corrects spelling, grammar, and punctuation in text.
 ```bash
 curl -X POST http://localhost:3000/api/proofread \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-your-key-1" \
   -d '{"text": "This is a sentance with mistaks."}'
 ```
 
 ```javascript
 const response = await fetch("http://localhost:3000/api/proofread", {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer sk-your-key-1"
+  },
   body: JSON.stringify({ text: "This is a sentance with mistaks." }),
 });
 
@@ -171,13 +209,17 @@ Creates professional, clear, and concise messages based on descriptions.
 ```bash
 curl -X POST http://localhost:3000/api/compose \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-your-key-1" \
   -d '{"description": "I need to tell my team that the meeting is postponed and I will send a new calendar invite soon"}'
 ```
 
 ```javascript
 const response = await fetch("http://localhost:3000/api/compose", {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer sk-your-key-1"
+  },
   body: JSON.stringify({
     description: "I need to tell my team that the meeting is postponed",
   }),
@@ -197,6 +239,7 @@ You can use the deployed Vercel instance by replacing `http://localhost:3000` wi
 # Example with deployed endpoint
 curl -X POST https://transcription-api-omega.vercel.app/api/proofread \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-your-key-1" \
   -d '{"text": "Fix my grammar please"}'
 ```
 
@@ -211,6 +254,12 @@ All endpoints return consistent error responses:
 - Missing required parameters
 - Invalid parameter types
 - Invalid file uploads
+
+**401 Unauthorized**
+
+- Missing `Authorization` header
+- Invalid API key
+- Malformed authorization header
 
 **500 Internal Server Error**
 
